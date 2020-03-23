@@ -9,6 +9,7 @@ END_POSITION=100
 currentPosition=0
 nextPosition=0
 snakePosition=0
+numberOfDie=0
 
 #Case 2 : Ladder climbing
 function ladderClimbUp()
@@ -21,6 +22,7 @@ function ladderClimbUp()
 	else
 		currentPosition=$nextPosition
 	fi
+	arrayOfDie[$numberOfDie]=$currentPosition
 	echo $currentPosition
 }
 
@@ -42,23 +44,27 @@ echo "Player roll a die: "
 
 while [[ $currentPosition -lt $END_POSITION ]]
 do
-	dieRoll=$((RANDOM%6+1))
-	choice=$((RANDOM%3+1))
+	dieRandom=$((RANDOM%6+1))
+	choiceRandom=$((RANDOM%3+1))
 
-	case $choice in
+	case $choiceRandom in
 	1)
 	echo "No Play."
 	currentPosition=$currentPosition
 	;;
 	2)
 	echo "Ladder."
-	nextPosition=$((currentPosition+dieRoll))
+	nextPosition=$((currentPosition+dieRandom))
+	numberOfDie=$((numberOfDie+1))
 	currentPosition=$( ladderClimbUp $nextPosition )
+	arrayOfDie[$numberOfDie]=$currentPosition
 	;;
 	3)
 	echo "Snake bites"
-	snakePosition=$((currentPosition-dieRoll))
+	snakePosition=$((currentPosition-dieRandom))
 	currentPosition=$( ladderClimbDown $snakePosition )
 	;;
 	esac
 done
+
+echo "${!arrayOfDie[@]} :${arrayOfDie[@]}"
