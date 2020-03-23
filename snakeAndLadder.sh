@@ -10,10 +10,12 @@ currentPosition=0
 
 echo "Player roll a die: "
 
-dieRoll=$((RANDOM%6+1))
-choice=$((RANDOM%3+1))
+while [[ $currentPosition -lt $END_POSITION ]]
+do
+	dieRoll=$((RANDOM%6+1))
+	choice=$((RANDOM%3+1))
 
-case $choice in
+	case $choice in
 	1)
 	echo "No Play."
 	currentPosition=$currentPosition
@@ -31,4 +33,5 @@ case $choice in
 		currentPosition=$((currentPosition-dieRoll))
 	fi
 	;;
-esac
+	esac
+done
