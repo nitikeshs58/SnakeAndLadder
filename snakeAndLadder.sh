@@ -7,3 +7,8 @@ END_POSITION=100
 
 #Variables
 currentPosition=0
+
+echo "Player roll a die: "
+
+dieRoll=$((RANDOM%6+1))
+
