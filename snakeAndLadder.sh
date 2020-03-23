@@ -7,6 +7,36 @@ END_POSITION=100
 
 #Variables
 currentPosition=0
+nextPosition=0
+snakePosition=0
+
+#Case 2 : Ladder climbing
+function ladderClimbUp()
+{
+	nextPosition=$1
+   #if your nextPosition is greater than EndPosition (ex. 103>100)
+	if [[ $nextPosition -gt $END_POSITION ]]
+	then
+		currentPosition=$currentPosition
+	else
+		currentPosition=$nextPosition
+	fi
+	echo $currentPosition
+}
+
+#Case 3 : Snake Bites 
+function ladderClimbDown()
+{
+	snakePosition=$1
+   #at start of game if snake bites currentPosition will be in -ve(ex. -2)
+	if [[ $snakePosition -lt $START_POSITION ]]
+	then
+		currentPosition=$currentPosition
+	else
+		currentPosition=$snakePosition
+	fi
+	echo $currentPosition
+}
 
 echo "Player roll a die: "
 
@@ -22,16 +52,13 @@ do
 	;;
 	2)
 	echo "Ladder."
-	currentPosition=$((currentPosition+dieRoll))
+	nextPosition=$((currentPosition+dieRoll))
+	currentPosition=$( ladderClimbUp $nextPosition )
 	;;
 	3)
 	echo "Snake bites"
-	if [[ $dieRoll>$currentPosition ]]
-	then
-		currentPosition=$currentPosition
-	else
-		currentPosition=$((currentPosition-dieRoll))
-	fi
+	snakePosition=$((currentPosition-dieRoll))
+	currentPosition=$( ladderClimbDown $snakePosition )
 	;;
 	esac
 done
