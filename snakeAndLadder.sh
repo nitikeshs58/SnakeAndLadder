@@ -9,9 +9,10 @@ END_POSITION=100
 currentPosition=0
 nextPosition=0
 snakePosition=0
-numberOfDie=0
+diePlayerOne=0
+diePlayerTwo=0
 
-#Case 2 : Ladder climbing
+#Case2:Ladder climbing
 function ladderClimbUp()
 {
 	nextPosition=$1
@@ -26,7 +27,7 @@ function ladderClimbUp()
 	echo $currentPosition
 }
 
-#Case 3 : Snake Bites 
+#Case3:Snake Bites
 function ladderClimbDown()
 {
 	snakePosition=$1
@@ -40,31 +41,44 @@ function ladderClimbDown()
 	echo $currentPosition
 }
 
-echo "Player roll a die: "
+#function and random die rolling
+function twoPlayers()
+{
+	numberOfDie=$1
+	while [[ $currentPosition -lt $END_POSITION ]]
+	do
+		dieRandom=$((RANDOM%6+1))
+		choiceRandom=$((RANDOM%3+1))
 
-while [[ $currentPosition -lt $END_POSITION ]]
-do
-	dieRandom=$((RANDOM%6+1))
-	choiceRandom=$((RANDOM%3+1))
+		case $choiceRandom in
+		1)
+		# No Play.
+		currentPosition=$currentPosition
+		;;
+		2)
+		# Ladder Climb
+		nextPosition=$((currentPosition+dieRandom))
+		numberOfDie=$((numberOfDie+1))
+		currentPosition=$( ladderClimbUp $nextPosition )
+		;;
+		3)
+		# Snake bites
+		snakePosition=$((currentPosition-dieRandom))
+		currentPosition=$( ladderClimbDown $snakePosition )
+		;;
+		esac
+	done
 
-	case $choiceRandom in
-	1)
-	echo "No Play."
-	currentPosition=$currentPosition
-	;;
-	2)
-	echo "Ladder."
-	nextPosition=$((currentPosition+dieRandom))
-	numberOfDie=$((numberOfDie+1))
-	currentPosition=$( ladderClimbUp $nextPosition )
-	arrayOfDie[$numberOfDie]=$currentPosition
-	;;
-	3)
-	echo "Snake bites"
-	snakePosition=$((currentPosition-dieRandom))
-	currentPosition=$( ladderClimbDown $snakePosition )
-	;;
-	esac
-done
+echo $numberOfDie
+}
 
-echo "${!arrayOfDie[@]} :${arrayOfDie[@]}"
+#function call for two players
+diesOne=$( twoPlayers $diePlayerOne )
+diesTwo=$( twoPlayers $diePlayerTwo )
+
+if [[ $diesOne -lt $diesTwo ]]
+then
+	echo "!!! Player 1 Wins !!!"
+else
+	echo "!!! Player 2 Wins !!!"
+fi
