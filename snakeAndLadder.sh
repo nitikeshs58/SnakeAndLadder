@@ -11,4 +11,24 @@ currentPosition=0
 echo "Player roll a die: "
 
 dieRoll=$((RANDOM%6+1))
+choice=$((RANDOM%3+1))
 
+case $choice in
+	1)
+	echo "No Play."
+	currentPosition=$currentPosition
+	;;
+	2)
+	echo "Ladder."
+	currentPosition=$((currentPosition+dieRoll))
+	;;
+	3)
+	echo "Snake bites"
+	if [[ $dieRoll>$currentPosition ]]
+	then
+		currentPosition=$currentPosition
+	else
+		currentPosition=$((currentPosition-dieRoll))
+	fi
+	;;
+esac
